@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#dad2c8">
+  <meta name="description" content="Explore innovation as a building. An interactive visual metaphor map, from shared foundations to experimentation and growth.">
+  <title>Innovation by Design — A visual metaphor map</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/style.css?v=fullscreen-button-1">
+  <script defer src="assets/gsap.min.js"></script><script type="module" src="assets/app.js?v=fullscreen-button-1"></script>
+</head>
+<body>
+ <header class="masthead">
+  <a class="brand" href="#" aria-label="Innovation by Design, overview"><svg viewBox="0 0 34 34" aria-hidden="true"><path d="m4 12 13-8 13 8-13 8zM4 19l13 8 13-8M4 26l13 8 13-8"/></svg><span>Innovation by Design<span class="brand-sub">A visual metaphor map</span></span></a>
+  <div class="header-note">An architecture for innovation.<br>A different way to see the journey.</div>
+  <div class="header-actions"><button id="present-button" class="tour-button" aria-pressed="false" aria-label="Enter full screen" title="Enter full screen"><svg class="fullscreen-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg><span class="fullscreen-label">Full screen</span></button><button id="tour-button" class="tour-button"><span class="play-icon">▷</span> Take a guided tour</button><button id="motion-toggle" class="icon-button" title="Pause animations" aria-label="Pause animations" aria-pressed="false">Ⅱ</button></div>
+ </header>
+ <div class="app-shell">
+  <aside class="navigation" aria-label="Map navigation">
+   <button class="overview-button active" id="overview-button"><span>↗</span> The whole building <span class="button-arrow">↗</span></button>
+   <nav id="floor-nav" aria-label="Floors"></nav>
+   <div class="nav-bottom"><button id="shortcuts-button" class="text-button"><span>↑↓</span> Express lift <span class="button-arrow">↗</span></button><div class="key-hint">Lift: shortcuts between floors.</div><a class="source-link" href="https://www.figma.com/design/k8MVAobo4Q6nUunk8qMIhU/5313-actual-Map?node-id=48-649" target="_blank" rel="noopener">Original Figma map <span>↗</span></a></div>
+  </aside>
+  <main class="map-area" id="map-area" aria-label="Interactive innovation building">
+   <div class="map-topbar"><div class="map-location"><button id="back-to-building" class="back-to-building" hidden>← Back to whole building</button><div class="breadcrumb" id="breadcrumb">The whole building <span>/</span> Explore freely</div></div><div class="view-toggle" role="group" aria-label="Map perspective"><button id="iso-button" class="active" aria-pressed="true">Isometric</button><button id="plan-button" aria-pressed="false">Top-down</button></div></div>
+   <div class="map-canvas" id="map-canvas">
+    <svg id="map" role="group" aria-label="Interactive isometric building. Select a floor or room to explore." viewBox="-170 -180 1390 2230"><defs><filter id="room-shadow" x="-40%" y="-60%" width="200%" height="240%"><feDropShadow dx="0" dy="16" stdDeviation="12" flood-color="#242925" flood-opacity=".18"/></filter><pattern id="site-hatch" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M0 12 12 0" stroke="#79766d" stroke-opacity=".12" stroke-width="1"/></pattern></defs><g id="world"></g></svg>
+    <div id="hover-tip" class="hover-tip" hidden><span class="tip-category"></span><strong></strong><small>Click to step inside ↗</small></div>
+    <div class="map-empty" id="map-empty" hidden>No matching rooms on this floor.</div>
+    <div class="compass" aria-hidden="true"><svg viewBox="0 0 62 62"><path d="m31 7 0 48M7 31h48M31 7l-5 12h10z"/><circle cx="31" cy="31" r="23"/></svg><span>Explore / connect / grow</span></div>
+   </div>
+   <div class="map-controls"><div class="legend" id="legend" role="group" aria-label="Filter map by category"></div><div class="zoom-tools"><button class="icon-button" id="zoom-out" aria-label="Zoom out">−</button><span id="zoom-label">100%</span><button class="icon-button" id="zoom-in" aria-label="Zoom in">+</button><button class="icon-button" id="reset-view" aria-label="Reset view" title="Reset view">⤢</button></div></div>
+   <button id="floor-guide-button" class="floor-guide-button" hidden>Read this floor ↗</button><div class="map-footer"><span id="map-instruction">Hover to discover · Click to explore · Drag to move</span><button id="spread-button" class="text-button" aria-pressed="true">↕ <span>Collapse floors</span></button></div>
+  </main>
+  <aside class="inspector" id="inspector" aria-label="Selected area details"><div id="inspector-content" aria-live="polite"></div></aside>
+ </div>
+ <div class="mobile-floor-switch"><button id="mobile-prev" aria-label="Previous floor">←</button><span id="mobile-current">The whole building</span><button id="mobile-next" aria-label="Next floor">→</button></div>
+ <div class="tour-bar" id="tour-bar" hidden><button id="tour-close" aria-label="End guided tour">×</button><span id="tour-count">01 / 05</span><span id="tour-label"></span><button id="tour-prev">←</button><button id="tour-next">Next floor →</button></div>
+ <script>document.documentElement.classList.add('js');</script>
+ <noscript><div class="noscript-note">Enable JavaScript to explore the interactive map. <a href="https://www.figma.com/design/k8MVAobo4Q6nUunk8qMIhU/5313-actual-Map">View the original map in Figma.</a></div></noscript>
+</body></html>
