@@ -137,6 +137,61 @@ function loadPanorama(){
    hit.addEventListener('pointerenter',highlight);
    hit.addEventListener('pointerleave',()=>{if(document.activeElement!==hit)reset();});
   }
+  // Use the same coordinate transform as the Figma SVG for its navigation targets.
+  const navigation=svg('g',{transform:`translate(${inset} -20) scale(${scale}) translate(-1270 -230)`},hits);
+  const addTarget=(label,d,activate,stair=false)=>{
+   const hit=svg('path',{d,fill:'transparent',stroke:'transparent','stroke-width':12,role:'button',tabindex:0,'aria-label':label},navigation);
+   hit.style.cursor='pointer';
+   if(stair){
+    hit.setAttribute('fill','none');
+    hit.setAttribute('stroke-width',90);
+    hit.setAttribute('stroke-linecap','round');
+    hit.setAttribute('stroke-linejoin','round');
+   }
+   const highlight=()=>{hit.setAttribute('stroke',stair?'#2a4c9e35':'#2a4c9e');if(!stair)hit.setAttribute('fill','#2a4c9e18');};
+   const reset=()=>{hit.setAttribute('stroke','transparent');hit.setAttribute('fill',stair?'none':'transparent');};
+   hit.addEventListener('pointerenter',highlight);
+   hit.addEventListener('pointerleave',()=>{if(document.activeElement!==hit)reset();});
+   hit.addEventListener('focus',highlight);
+   hit.addEventListener('blur',reset);
+   hit.addEventListener('click',()=>{if(!suppressClick)activate();});
+   hit.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();activate();}});
+  };
+  const stairFlights=[
+   [[1840,3350],[2060,3780],[1895,4070]],
+   [[1770,2010],[2055,2480],[1890,2870]],
+   [[1770,983],[2055,1453],[1890,1843]]
+  ];
+  stairFlights.forEach((vertices,i)=>{
+   const d='M'+vertices.map(p=>p.join(' ')).join('L');
+   addTarget(`Staircase ${STAIR[i].from} to ${STAIR[i].to}`,d,()=>showStaircase(i),true);
+  });
+  addTarget('Express lift: explore shortcuts','M2545 545L2661 616L2725 577V4098L2661 4137L2545 4066Z',showShortcuts);
+  const blocks={"LL":[[["393.858","266.075","matrix(0.851636 0.524134 -0.851636 0.524134 2649.89 4118.88)"],["504.138","266.075","matrix(0.851636 0.524134 -0.851636 0.524134 2111.3 3787.4)"],["504.138","260.074","matrix(0.851636 0.524134 -0.851636 0.524134 1789.29 3985.58)"]],[["458.833","60.4279","matrix(0.851636 0.524134 -0.851636 0.524134 1974.71 3896.06)"],["458.833","66.3717","matrix(0.851636 0.524134 -0.851636 0.524134 1654.12 4093.36)"],["393.858","154.044","matrix(0.851636 0.524134 -0.851636 0.524134 2327.88 4317.05)"]],["M3005.5 4342.15L3286.84 4515.3V4533.12L3131.78 4628.55H3102.83L2821.49 4455.4L3005.5 4342.15Z","M2763.57 4491.05L3044.91 4664.2V4682.02L2860.89 4795.27H2831.93L2550.59 4622.12L2763.57 4491.05Z"]],"L1":[[["503.761","265.741","matrix(0.851636 0.524134 -0.851636 0.524134 2110.89 2776.83)"],["503.761","224.637","matrix(0.851636 0.524134 -0.851636 0.524134 1789.33 2974.73)"],["393.832","265.741","matrix(0.851636 0.524134 -0.851636 0.524134 2649 3108)"],["393.832","224.637","matrix(0.851636 0.524134 -0.851636 0.524134 2327.43 3305.9)"]],[["458.833","60.2219","matrix(0.851636 0.524134 -0.851636 0.524134 1958.66 2891.56)"],["367.067","51.6188","matrix(0.851636 0.524134 -0.851636 0.524134 2193.93 3402.1)"]],["M3006.48 3331.2L3286.22 3503.36V3521.18L3164.94 3595.82H3135.99L2856.25 3423.66L3006.48 3331.2Z","M2802.19 3453.33L3086.09 3628.05V3645.87L2983.84 3708.79H2954.89L2670.99 3534.07L2802.19 3453.33Z","M2620.65 3565.05L2904.09 3739.49V3757.31L2785.32 3830.4H2756.37L2472.93 3655.97L2620.65 3565.05Z"]],"L2":[[["503.761","265.741","matrix(0.851636 0.524134 -0.851636 0.524134 2110.87 1607.25)"],["393.832","265.741","matrix(0.851636 0.524134 -0.851636 0.524134 2648.98 1938.43)"],["1025.68","224.637","matrix(0.851636 0.524134 -0.851636 0.524134 1789.31 1805.16)"]],[["458.833","55.4424","matrix(0.851636 0.524134 -0.851636 0.524134 1955.39 1723.99)"],["367.067","55.4424","matrix(0.851636 0.524134 -0.851636 0.524134 2197.17 2230.53)"]],["M3005.47 2161.43L3286.41 2334.34V2352.16L3073.67 2483.09H3044.72L2763.77 2310.18L3005.47 2161.43Z","M2717.28 2338.79L2998.23 2511.7V2529.52L2785.49 2660.45H2756.53L2475.59 2487.54L2717.28 2338.79Z"]],"L3":[[["329.787","265.741","matrix(0.851636 0.524134 -0.851636 0.524134 2110.87 580.094)"],["329.787","265.741","matrix(0.851636 0.524134 -0.851636 0.524134 2406.39 761.965)"],["331.698","265.741","matrix(0.851636 0.524134 -0.851636 0.524134 2701.9 943.836)"],["329.787","224.637","matrix(0.851636 0.524134 -0.851636 0.524134 1789.31 777.998)"],["329.787","224.637","matrix(0.851636 0.524134 -0.851636 0.524134 2084.82 959.869)"],["331.698","224.637","matrix(0.851636 0.524134 -0.851636 0.524134 2380.34 1141.74)"]],[["458.833","55.4424","matrix(0.851636 0.524134 -0.851636 0.524134 1955.39 696.832)"]],["M3005.47 1134.27L3286.41 1307.17V1324.99L3164.85 1399.81H3135.89L2854.95 1226.9L3005.47 1134.27Z","M2815.79 1251.01L3096.73 1423.91V1441.73L2975.17 1516.55H2946.21L2665.27 1343.64L2815.79 1251.01Z","M2626.1 1367.74L2907.05 1540.65V1558.47L2785.49 1633.29H2756.53L2475.59 1460.38L2626.1 1367.74Z"]]};
+  const barriers={LL:[[2132,3713,332,88],[1307,3874,331,122],[2929,4127,332,122],[2196,4181,331,88]],L1:[[2154,2618,332,54],[1307,2863,331,54],[2929,3002,332,88],[1906,3262,331,88]],L2:[[1304,1848,331,82],[2929,1888,331,82],[1942,2131,331,82]],L3:[[1669,826],[2898,916],[1931,1126,331,82]]};
+  const interactive=svg('g',{},navigation);
+  const bindBlock=(hit,r)=>{
+   if(!r){hit.remove();return;}
+   hit.setAttribute('role','button');hit.setAttribute('tabindex','0');hit.setAttribute('aria-label',r.title);
+   hit.setAttribute('fill','transparent');hit.setAttribute('stroke-width','8');
+   hit.style.cursor='pointer';
+   const activate=()=>{if(!suppressClick)selectRoom(r.id);};
+   hit.addEventListener('pointerenter',e=>{if(!dragging){hit.setAttribute('stroke','#fff');hoverRoom(r,e);}});
+   hit.addEventListener('pointermove',e=>{if(!$('#hover-tip').hidden)moveTip(e);});
+   hit.addEventListener('pointerleave',()=>{hit.removeAttribute('stroke');unhoverRoom(r);});
+   hit.addEventListener('focus',()=>hit.setAttribute('stroke','#fff'));
+   hit.addEventListener('blur',()=>hit.removeAttribute('stroke'));
+   hit.addEventListener('click',activate);
+   hit.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();activate();}});
+  };
+  for(const [floor,[internal,reflection,external]] of Object.entries(blocks)){
+   const groups=data[floor].groups;
+   for(const [category,shapes] of [['internal',internal],['reflection',reflection]]){
+    shapes.forEach(([width,height,transform],i)=>bindBlock(svg('rect',{width,height,transform},interactive),groups[category][i]));
+   }
+   external.forEach((d,i)=>bindBlock(svg('path',{d},interactive),groups.external[i]));
+   barriers[floor].forEach(([x,y,width,height],i)=>bindBlock(width?svg('rect',{x,y,width,height},interactive):svg('circle',{cx:x,cy:y,r:34},interactive),groups.roadblocks[i]));
+  }
   panoramaReady=true;
   exteriorAppearance();
  };
@@ -402,11 +457,16 @@ function stopRoute(){if(routeRun){routeRun.kill();routeRun=null;}gsap.killTweens
 function runRoute(index){
  stopRoute();if(state.view==='plan')setView('iso');const r=ROUTES[index];state.floor='all';state.room=null;gsap.to($('#building-connections'),{opacity:1,duration:duration(.3)});updateFilters();for(const f of ORDER){const g=$('#floor-'+f),active=[r.start,r.end].includes(f);g.classList.remove('inactive');gsap.to(g,{opacity:active?1:.12,duration:duration(.4),overwrite:true});}
  renderInspector(`<button class="back-button" data-action="shortcuts">← All express routes</button><div class="inspector-kicker">Express route / ${index+1}</div><h2>${r.start} → ${r.end}</h2><p class="lead">${r.title}</p><div class="route-progress"><span></span></div><h3>Ready to board?</h3><ul class="detail-list">${r.conditions.map(c=>`<li>${c}</li>`).join('')}</ul><button class="primary-button" data-floor="${r.end}">Step into ${r.end} <span>↗</span></button><p class="inspector-footnote">Direct access uses existing capabilities. It does not remove the need to test assumptions.</p>`,true);
- const o=svg('g',{id:'route-overlay','pointer-events':'none'},world),top=floorBase(r.end)+170,bot=floorBase(r.start)+170;
- svg('path',{d:`M740 ${bot}V${top}`,stroke:'#2a4c9e','stroke-width':4,fill:'none','stroke-dasharray':'10 8'},o);
- const cabin=svg('rect',{x:727,y:bot-15,width:26,height:30,fill:'#2a4c9e',rx:3},o);
+ const figma=panoramaReady&&state.view==='iso'&&!exteriorVisible;
+ const scale=2290/5660;
+ const stops={Foundation:5079,LL:4092,L1:3081,L2:1911,L3:884};
+ const stop=f=>figma?-20+(stops[f]-230)*scale:floorBase(f)+170;
+ const x=figma?(1190-2930*scale)/2+(2615-1270)*scale:740;
+ const o=svg('g',{id:'route-overlay','pointer-events':'none'},world),top=stop(r.end),bot=stop(r.start);
+ svg('path',{d:`M${x} ${bot}V${top}`,stroke:'#2a4c9e','stroke-width':4,fill:'none','stroke-dasharray':'10 8'},o);
+ const cabin=svg('rect',{x:x-13,y:bot-15,width:26,height:30,fill:'#2a4c9e',rx:3},o);
  routeRun=gsap.timeline();routeRun.to(cabin,{attr:{y:top-15},duration:duration(2.1),ease:'power2.inOut'},0).to('.route-progress span',{width:'100%',duration:duration(2.1),ease:'power2.inOut'},0);
- setCamera({x:-210,y:floorBase(r.end)-170,w:1440,h:floorBase(r.start)-floorBase(r.end)+800});
+ setCamera({x:-150,y:top-260,w:1440,h:bot-top+530});
 }
 const STAIR=[{from:'LL',to:'L1',title:'Build Readiness',steps:['Identify barriers','Design enablers','Assign owners & resources','Establish routines']},{from:'L1',to:'L2',title:'Develop Strategic Focus',steps:['Scan signals','Interpret drivers','Frame markets','Understand users','Choose where to play']},{from:'L2',to:'L3',title:'Build Collective Commitment',steps:['Map actors','Choose our role','Build partnerships','Align initiatives','Confirm capabilities & ownership']}];
 function showStaircase(i,reverse=false){const original=STAIR[i],s=reverse?{...original,from:original.to,to:original.from}:original;renderInspector(`<button class="back-button" data-floor="${s.from}">← Back to ${s.from}</button><div class="inspector-kicker">${s.from} → ${s.to} / Staircase</div><h2>${s.title}</h2><p class="lead">${reverse?'Return to the previous floor to revisit these capabilities.':'Build the capability to move to the next floor.'}</p><ol class="intro-steps">${s.steps.map((t,j)=>`<li><span class="step-no">${String(j+1).padStart(2,'0')}</span>${t}</li>`).join('')}</ol><div class="intro-rule"></div><button class="primary-button" data-floor="${s.to}">${reverse?'Return':'Continue'} to ${s.to}<span>${reverse?'↓':'↑'}</span></button>`,true);}
